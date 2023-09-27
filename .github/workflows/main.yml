@@ -42,8 +42,10 @@ jobs:
             -   name: Run Tests & Coverage
                 run: ./gradlew test jacocoTestReport
 
-            -   name: Upload coverage to Codecov
-                uses: codecov/codecov-action@v1
-                with:
-                    file: ./build/reports/jacoco/test/jacocoTestReport.xml
-                    fail_ci_if_error: true
+            - name: Upload coverage reports to Codecov
+              uses: codecov/codecov-action@v3
+              env:
+                  CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+              with:
+                  file: ./build/reports/jacoco/test/jacocoTestReport.xml
+                  fail_ci_if_error: true
