@@ -1,0 +1,40 @@
+name: Build, Test and Coverage
+
+on:
+    push:
+        branches:
+            - main
+    pull_request:
+        branches:
+            - main
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v2
+
+            - name: Set up JDK 17
+              uses: actions/setup-java@v2
+              with:
+                  java-version: '17'
+                  distribution: 'adopt'
+                  cache: gradle
+
+            - name: Build with Gradle
+              run: ./gradlew build
+
+            - name: Build Docker Image
+              run: docker build -t my-spring-boot-app .
+
+            - name: Run Tests & Coverage
+              run: ./gradlew test jacocoTestReport
+
+            - name: Upload coverage to Codecov
+              uses: codecov/codecov-action@v1
+              with:
+                  file: ./build/reports/jacoco/test/jacocoTestReport.xml
+                  fail_ci_if_error: true
+
