@@ -13,15 +13,9 @@ class BookRepositoryImpl(private val jpaRepo: JpaBookRepository) : BookRepositor
     override fun findAllBooks(): List<Book> = jpaRepo.findAll().map { it.toDomain() }
 
     override fun findBookById(id: UUID): Book? = jpaRepo.findById(id).orElseGet { null }?.toDomain()
+    override fun findBookByTitle(title: String): Book? = jpaRepo.findByTitle(title)?.toDomain()
 
     override fun saveBook(book: Book): Book = jpaRepo.save(book.toEntity()).toDomain()
-
-    override fun updateBook(id: UUID, book: Book): Book {
-        if (jpaRepo.existsById(id)) {
-            return jpaRepo.save(book.copy(id = id).toEntity()).toDomain()
-        }
-        throw IllegalArgumentException("Book Not Found")
-    }
 
     override fun deleteBookById(id: UUID): Boolean {
         if (jpaRepo.existsById(id)) {

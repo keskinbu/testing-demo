@@ -11,12 +11,12 @@ class BookService(private val bookRepository: BookRepository) {
     fun getAllBooks(): List<Book> = bookRepository.findAllBooks()
 
     fun getBookById(id: UUID): Book? = bookRepository.findBookById(id)
-
-    fun createBook(book: Book): Book = bookRepository.saveBook(book)
-
-    fun updateBook(id: UUID, book: Book): Book {
-        // Burada daha fazla validasyon ve kontrol gerçekleştirilebilir
-        return bookRepository.updateBook(id, book)
+    fun createBook(book: Book): Book {
+        val existingBook = bookRepository.findBookByTitle(book.title)
+        if (existingBook != null) {
+            throw IllegalArgumentException("A book with the title ${book.title} already exists.")
+        }
+        return bookRepository.saveBook(book)
     }
 
     fun deleteBook(id: UUID): Boolean = bookRepository.deleteBookById(id)
