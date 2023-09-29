@@ -53,7 +53,6 @@ class BookServiceTest {
     fun `test createBook with new title should return saved book`() {
         val book = Book(UUID.randomUUID(), "UniqueTitle", "Author1", 2001)
 
-        // Assume there's no other book with the same title
         Mockito.`when`(bookRepository.findBookByTitle(book.title)).thenReturn(null)
         Mockito.`when`(bookRepository.saveBook(book)).thenReturn(book)
 
@@ -65,7 +64,6 @@ class BookServiceTest {
     fun `test createBook with duplicate title should throw exception`() {
         val book = Book(UUID.randomUUID(), "DuplicateTitle", "Author1", 2001)
 
-        // Assume there's another book with the same title
         Mockito.`when`(bookRepository.findBookByTitle(book.title)).thenReturn(book)
 
         val exception = assertThrows<IllegalArgumentException> {
