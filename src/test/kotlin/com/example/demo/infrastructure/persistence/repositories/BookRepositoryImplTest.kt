@@ -30,6 +30,7 @@ class BookRepositoryImplTest {
         Mockito.`when`(jpaRepo.findAll()).thenReturn(listOf(bookEntity))
 
         val books = bookRepository.findAllBooks()
+
         assertEquals(1, books.size)
         assertEquals("Title", books[0].title)
     }
@@ -41,6 +42,7 @@ class BookRepositoryImplTest {
         Mockito.`when`(jpaRepo.findById(id)).thenReturn(Optional.of(bookEntity))
 
         val book = bookRepository.findBookById(id)
+
         assertNotNull(book)
         assertEquals("Title", book?.title)
     }
@@ -53,6 +55,7 @@ class BookRepositoryImplTest {
         Mockito.`when`(jpaRepo.findByTitle(title)).thenReturn(bookEntity)
 
         val book = bookRepository.findBookByTitle(title)
+
         assertNotNull(book)
         assertEquals(title, book?.title)
     }
@@ -64,6 +67,7 @@ class BookRepositoryImplTest {
         Mockito.`when`(jpaRepo.save(Mockito.any())).thenReturn(savedBookEntity)
 
         val savedBook = bookRepository.saveBook(book)
+
         assertNotNull(savedBook.id)
         assertEquals("Title", savedBook.title)
     }
@@ -74,6 +78,7 @@ class BookRepositoryImplTest {
         Mockito.`when`(jpaRepo.existsById(id)).thenReturn(true)
 
         val result = bookRepository.deleteBookById(id)
+
         assertTrue(result)
     }
 }
