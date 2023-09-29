@@ -54,7 +54,7 @@ class BookServiceTest {
         val book = Book(UUID.randomUUID(), "UniqueTitle", "Author1", 2001)
 
         // Assume there's no other book with the same title
-        Mockito.`when`(bookRepository.findBookByTitle(book.title)).thenReturn(null)
+        Mockito.`when`(bookRepository.findBookByTitle(book.title)).thenReturn(book)
         Mockito.`when`(bookRepository.saveBook(book)).thenReturn(book)
 
         val result = bookService.createBook(book)
