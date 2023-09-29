@@ -11,6 +11,7 @@ import org.mockito.Mock
 import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.kotlin.any
+import org.mockito.kotlin.given
 import org.mockito.kotlin.whenever
 import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
@@ -56,7 +57,7 @@ class BookControllerTest {
     fun `test getBookById should return a book`() {
         val book = Book(UUID.randomUUID(), "Title1", "Author1", 2001)
 
-        Mockito.`when`(bookService.getBookById(book.id)).thenReturn(book)
+        given(bookService.getBookById(book.id)).willReturn(book)
 
         webTestClient.get().uri("/api/books/${book.id}")
             .exchange()
