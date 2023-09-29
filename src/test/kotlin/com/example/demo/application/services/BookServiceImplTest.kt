@@ -12,7 +12,7 @@ import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import java.util.*
 
-class BookServiceTest {
+class BookServiceImplTest {
 
     @InjectMocks
     lateinit var bookService: BookServiceImpl
