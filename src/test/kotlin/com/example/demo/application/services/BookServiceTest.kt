@@ -15,7 +15,7 @@ import java.util.*
 class BookServiceTest {
 
     @InjectMocks
-    lateinit var bookService: BookService
+    lateinit var bookService: BookServiceImpl
 
     @Mock
     lateinit var bookRepository: BookRepository

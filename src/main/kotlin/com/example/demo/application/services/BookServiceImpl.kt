@@ -2,16 +2,17 @@ package com.example.demo.application.services
 
 import com.example.demo.domain.entities.Book
 import com.example.demo.domain.repositories.BookRepository
+import com.example.demo.domain.services.BookService
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class BookService(private val bookRepository: BookRepository) {
+class BookServiceImpl(private val bookRepository: BookRepository) : BookService {
 
-    fun getAllBooks(): List<Book> = bookRepository.findAllBooks()
+    override fun getAllBooks(): List<Book> = bookRepository.findAllBooks()
 
-    fun getBookById(id: UUID): Book? = bookRepository.findBookById(id)
-    fun createBook(book: Book): Book {
+    override fun getBookById(id: UUID): Book? = bookRepository.findBookById(id)
+    override fun createBook(book: Book): Book {
         val existingBook = bookRepository.findBookByTitle(book.title)
         if (existingBook != null) {
             throw IllegalArgumentException("A book with the title ${book.title} already exists.")
@@ -19,5 +20,5 @@ class BookService(private val bookRepository: BookRepository) {
         return bookRepository.saveBook(book)
     }
 
-    fun deleteBook(id: UUID): Boolean = bookRepository.deleteBookById(id)
+    override fun deleteBook(id: UUID): Boolean = bookRepository.deleteBookById(id)
 }

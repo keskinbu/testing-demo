@@ -1,7 +1,7 @@
 package com.example.demo.infrastructure.api.controller
 
-import com.example.demo.application.services.BookService
 import com.example.demo.domain.entities.Book
+import com.example.demo.domain.services.BookService
 import com.example.demo.infrastructure.api.handlers.GlobalExceptionHandler
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.BeforeEach

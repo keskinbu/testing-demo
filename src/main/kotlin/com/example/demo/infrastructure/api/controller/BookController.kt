@@ -1,8 +1,8 @@
 package com.example.demo.infrastructure.api.controller
 
 import com.example.demo.application.dtos.BookDTO
-import com.example.demo.application.services.BookService
 import com.example.demo.domain.entities.Book
+import com.example.demo.domain.services.BookService
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.util.*
