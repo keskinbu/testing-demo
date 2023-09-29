@@ -1,6 +1,7 @@
 # Library Project
 
 ![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)
+[![codecov](https://codecov.io/gh/keskinbu/testing-demo/graph/badge.svg?token=B64JLFOU49)](https://codecov.io/gh/keskinbu/testing-demo)
 
 Library Project is an open-source project that demonstrates a simple library management system, focusing on book
 operations. It's implemented with Kotlin, Spring Boot, and uses PostgreSQL as its database.
