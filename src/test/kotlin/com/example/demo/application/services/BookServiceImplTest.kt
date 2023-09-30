@@ -2,6 +2,7 @@ package com.example.demo.application.services
 
 import com.example.demo.domain.entities.Book
 import com.example.demo.domain.repositories.BookRepository
+import java.lang.RuntimeException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -118,6 +119,20 @@ class BookServiceImplTest {
         }
 
         assertEquals(exception.message, "Search text shouldn't be more than 20 letter!")
+    }
+
+    @Test
+    fun `test searchBook with no matching book should inform user`(){
+        val searchText = "random text"
+
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(emptyList())
+
+        val exception = assertThrows<RuntimeException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "No matching result!")
+
     }
 
 }
