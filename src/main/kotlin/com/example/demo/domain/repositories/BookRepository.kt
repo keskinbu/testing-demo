@@ -9,4 +9,5 @@ interface BookRepository {
     fun findBookByTitle(title: String): Book?
     fun saveBook(book: Book): Book
     fun deleteBookById(id: UUID): Boolean
+    fun searchBook(searchText: String): List<Book>
 }

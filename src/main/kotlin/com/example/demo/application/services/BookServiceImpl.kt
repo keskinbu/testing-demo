@@ -32,12 +32,17 @@ class BookServiceImpl(private val bookRepository: BookRepository) : BookService 
     }
 
     override fun deleteBook(id: UUID): Boolean = bookRepository.deleteBookById(id)
-    override fun searchBook(searchText: String): Optional<List<Book>> {
-        valideSearchText(searchText)
-        return Optional.empty()
+    override fun searchBook(searchText: String): List<Book> {
+        validateSearchText(searchText)
+
+        if(bookRepository.searchBook(searchText).isEmpty()){
+            throw RuntimeException("No matching result!")
+        }
+
+        return emptyList()
     }
 
-    private fun valideSearchText(searchText: String){
+    private fun validateSearchText(searchText: String){
         if (searchText.length < 2) {
             throw IllegalArgumentException("Search text shouldn't be less than 2 letter!")
         }
