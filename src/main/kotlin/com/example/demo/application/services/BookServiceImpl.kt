@@ -43,6 +43,9 @@ class BookServiceImpl(private val bookRepository: BookRepository) : BookService 
     }
 
     private fun validateSearchText(searchText: String){
+        if(searchText.isEmpty()){
+            throw IllegalArgumentException("Search criteria can't be empty!")
+        }
         if (searchText.length < 2) {
             throw IllegalArgumentException("Search text shouldn't be less than 2 letter!")
         }

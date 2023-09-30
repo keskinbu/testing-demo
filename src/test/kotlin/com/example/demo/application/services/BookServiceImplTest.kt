@@ -100,7 +100,7 @@ class BookServiceImplTest {
 
     @Test
     fun `test searchBook with text lest than 2 letter should throw exception`(){
-        val searchText = ""
+        val searchText = "a"
 
         val exception = assertThrows<IllegalArgumentException> {
             bookService.searchBook(searchText)
@@ -133,6 +133,17 @@ class BookServiceImplTest {
 
         assertEquals(exception.message, "No matching result!")
 
+    }
+
+    @Test
+    fun `test searchBook with empty search text should throw exception`(){
+        val searchText = ""
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "Search criteria can't be empty!")
     }
 
 }
