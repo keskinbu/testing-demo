@@ -146,4 +146,39 @@ class BookServiceImplTest {
         assertEquals(exception.message, "Search criteria can't be empty!")
     }
 
+    @Test
+    fun `test searchBook should return list of books`(){
+        val searchText = "test"
+
+        val books = listOf(
+            Book(UUID.randomUUID(), "Title1", "Author1", 2001),
+            Book(UUID.randomUUID(), "Title2", "Author2", 2002),
+        )
+
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(books)
+
+        val result = bookService.searchBook(searchText)
+
+        assertEquals(2, result.size)
+        assertEquals(books, result)
+
+    }
+
+    @Test
+    fun `test searchBook should return a book`(){
+        val searchText = "test"
+
+        val books = listOf(
+            Book(UUID.randomUUID(), "Title1", "Author1", 2001),
+        )
+
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(books)
+
+        val result = bookService.searchBook(searchText)
+
+        assertEquals(1, result.size)
+        assertEquals(books, result)
+
+    }
+
 }
