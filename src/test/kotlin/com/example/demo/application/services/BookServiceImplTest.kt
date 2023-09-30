@@ -96,4 +96,28 @@ class BookServiceImplTest {
 
         assertEquals("A book with the title DuplicateTitle already exists.", exception.message)
     }
+
+    @Test
+    fun `test searchBook with text lest than 2 letter should throw exception`(){
+        val searchText = ""
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "Search text shouldn't be less than 2 letter!")
+
+    }
+
+    @Test
+    fun `test searchBook with text more than 20 letter should throw exception`(){
+        val searchText = "a".repeat(21)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "Search text shouldn't be more than 20 letter!")
+    }
+
 }
