@@ -50,6 +50,30 @@ class BookServiceImplTest {
     }
 
     @Test
+    fun `test createBook with less than 3 chars title then throw exception`() {
+        val title = "ab"
+        val book = Book(UUID.randomUUID(), title, "author", 2002)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.createBook(book)
+        }
+
+        assertEquals("title cant be less than 3 chars!", exception.message)
+    }
+
+    @Test
+    fun `test createBook with more than 200 chars title then throw exception`() {
+        val title = "ab".repeat(200)
+        val book = Book(UUID.randomUUID(), title, "author", 2002)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.createBook(book)
+        }
+
+        assertEquals("title cant be more than 200 chars!", exception.message)
+    }
+
+    @Test
     fun `test createBook with new title should return saved book`() {
         val book = Book(UUID.randomUUID(), "UniqueTitle", "Author1", 2001)
 
