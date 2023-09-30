@@ -35,11 +35,13 @@ class BookServiceImpl(private val bookRepository: BookRepository) : BookService 
     override fun searchBook(searchText: String): List<Book> {
         validateSearchText(searchText)
 
-        if(bookRepository.searchBook(searchText).isEmpty()){
+        val result = bookRepository.searchBook(searchText)
+
+        if(result.isEmpty()){
             throw RuntimeException("No matching result!")
         }
 
-        return emptyList()
+        return result
     }
 
     private fun validateSearchText(searchText: String){
