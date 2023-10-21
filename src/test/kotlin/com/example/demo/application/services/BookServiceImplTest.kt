@@ -72,4 +72,28 @@ class BookServiceImplTest {
 
         assertEquals("A book with the title DuplicateTitle already exists.", exception.message)
     }
+
+    @Test
+    fun `when book title less than 3 chars then throw exception`() {
+        val title = "2c"
+        val book = Book(UUID.randomUUID(), title, "ty", 2001)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.createBook(book)
+        }
+
+        assertEquals("Book title cant be less than 3 chars!", exception.message)
+    }
+
+    @Test
+    fun `when book title bigger than 200 chars then throw exception`() {
+        val title = "2c".repeat(201)
+        val book = Book(UUID.randomUUID(), title, "ty", 2001)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.createBook(book)
+        }
+
+        assertEquals("Book title cant be bigger than 200 chars!", exception.message)
+    }
 }
