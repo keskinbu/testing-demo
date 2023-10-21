@@ -2,6 +2,7 @@ package com.example.demo.application.services
 
 import com.example.demo.domain.entities.Book
 import com.example.demo.domain.repositories.BookRepository
+import java.lang.RuntimeException
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -50,6 +51,30 @@ class BookServiceImplTest {
     }
 
     @Test
+    fun `test createBook with less than 3 chars title then throw exception`() {
+        val title = "ab"
+        val book = Book(UUID.randomUUID(), title, "author", 2002)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.createBook(book)
+        }
+
+        assertEquals("title cant be less than 3 chars!", exception.message)
+    }
+
+    @Test
+    fun `test createBook with more than 200 chars title then throw exception`() {
+        val title = "ab".repeat(200)
+        val book = Book(UUID.randomUUID(), title, "author", 2002)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.createBook(book)
+        }
+
+        assertEquals("title cant be more than 200 chars!", exception.message)
+    }
+
+    @Test
     fun `test createBook with new title should return saved book`() {
         val book = Book(UUID.randomUUID(), "UniqueTitle", "Author1", 2001)
 
@@ -72,4 +97,88 @@ class BookServiceImplTest {
 
         assertEquals("A book with the title DuplicateTitle already exists.", exception.message)
     }
+
+    @Test
+    fun `test searchBook with text lest than 2 letter should throw exception`(){
+        val searchText = "a"
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "Search text shouldn't be less than 2 letter!")
+
+    }
+
+    @Test
+    fun `test searchBook with text more than 20 letter should throw exception`(){
+        val searchText = "a".repeat(21)
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "Search text shouldn't be more than 20 letter!")
+    }
+
+    @Test
+    fun `test searchBook with no matching book should inform user`(){
+        val searchText = "random text"
+
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(emptyList())
+
+        val exception = assertThrows<RuntimeException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "No matching result!")
+
+    }
+
+    @Test
+    fun `test searchBook with empty search text should throw exception`(){
+        val searchText = ""
+
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+
+        assertEquals(exception.message, "Search criteria can't be empty!")
+    }
+
+    @Test
+    fun `test searchBook should return list of books`(){
+        val searchText = "test"
+
+        val books = listOf(
+            Book(UUID.randomUUID(), "Title1", "Author1", 2001),
+            Book(UUID.randomUUID(), "Title2", "Author2", 2002),
+        )
+
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(books)
+
+        val result = bookService.searchBook(searchText)
+
+        assertEquals(2, result.size)
+        assertEquals(books, result)
+
+    }
+
+    @Test
+    fun `test searchBook should return a book`(){
+        val searchText = "test"
+
+        val books = listOf(
+            Book(UUID.randomUUID(), "Title1", "Author1", 2001),
+        )
+
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(books)
+
+        val result = bookService.searchBook(searchText)
+
+        assertEquals(1, result.size)
+        assertEquals(books, result)
+
+    }
+
 }
