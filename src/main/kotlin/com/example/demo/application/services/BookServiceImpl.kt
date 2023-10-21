@@ -31,4 +31,25 @@ class BookServiceImpl(private val bookRepository: BookRepository) : BookService 
     }
 
     override fun deleteBook(id: UUID): Boolean = bookRepository.deleteBookById(id)
+    override fun searchBook(searchText: String): List<Book> {
+        validateSearchText(searchText)
+
+        val books = bookRepository.searchBook(searchText)
+
+        if (books.isEmpty()) {
+            throw IllegalArgumentException("Sonuç bulunamadı.")
+        }
+
+        return books;
+    }
+
+    private fun validateSearchText(searchText: String) {
+        if (searchText.isEmpty()) {
+            throw IllegalArgumentException("Lütfen bir arama kriteri girin")
+        } else if (searchText.length < 2) {
+            throw IllegalArgumentException("Arama kriteri en az 2 karakter olmadılır.")
+        } else if (searchText.length > 100) {
+            throw IllegalArgumentException("Arama kriteri en fazla 200 karakter olmadılır.")
+        }
+    }
 }

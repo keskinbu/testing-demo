@@ -96,4 +96,60 @@ class BookServiceImplTest {
 
         assertEquals("Book title cant be bigger than 200 chars!", exception.message)
     }
+
+    @Test
+    fun `when book search is valid then should return books`(){
+        val books = listOf(
+            Book(UUID.randomUUID(), "Book 1", "Murat", 2022),
+            Book(UUID.randomUUID(), "Book 2", "Murat", 2023),
+        )
+
+        val searchText = "Book"
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(books)
+
+        val foundBooks = bookService.searchBook(searchText);
+
+        assertEquals(books.size, foundBooks.size)
+    }
+
+    @Test
+    fun `when there is no book then should throw exception `(){
+        val searchText = "thereIsNoBook"
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(emptyList())
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+        assertEquals(exception.message, "Sonuç bulunamadı.")
+    }
+
+    @Test
+    fun `when search text is less than 2 chars then should throw exception `(){
+        val searchText = "c"
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(emptyList())
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+        assertEquals(exception.message, "Arama kriteri en az 2 karakter olmadılır.")
+    }
+
+    @Test
+    fun `when search text is bigger than 200 chars then should throw exception `(){
+        val searchText = "c".repeat(201)
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(emptyList())
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+        assertEquals(exception.message, "Arama kriteri en fazla 200 karakter olmadılır.")
+    }
+
+    @Test
+    fun `when search text is empty then should throw exception `(){
+        val searchText = ""
+        Mockito.`when`(bookRepository.searchBook(searchText)).thenReturn(emptyList())
+        val exception = assertThrows<IllegalArgumentException> {
+            bookService.searchBook(searchText)
+        }
+        assertEquals(exception.message, "Lütfen bir arama kriteri girin")
+    }
+
 }
