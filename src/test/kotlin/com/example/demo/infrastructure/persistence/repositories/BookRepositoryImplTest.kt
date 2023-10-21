@@ -1,6 +1,7 @@
 package com.example.demo.infrastructure.persistence.repositories
 
 import com.example.demo.domain.entities.Book
+import com.example.demo.infrastructure.persistence.entities.toDomain
 import com.example.demo.infrastructure.persistence.entities.toEntity
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
@@ -81,4 +82,89 @@ class BookRepositoryImplTest {
 
         assertTrue(result)
     }
+
+    @Test
+    fun `when book name contains search text then should return matched books`() {
+        val allBooks = listOf(
+            Book(UUID.randomUUID(), "Good Book 1", "Perfect Author", 1999),
+            Book(UUID.randomUUID(), "Good Book 2", "Perfect Author", 2001),
+            Book(UUID.randomUUID(), "Bad Book 1", "Bad Author", 1999),
+        ).map { x -> x.toEntity() }
+
+        val searchText = "Good"
+        val expectedBooks = listOf(
+            allBooks[0].toDomain(),
+            allBooks[1].toDomain())
+
+        Mockito.`when`(jpaRepo.findAll()).thenReturn(allBooks);
+
+        val foundBooks = bookRepository.searchBook(searchText);
+
+        assertEquals(expectedBooks.size, foundBooks.size)
+        assertEquals(expectedBooks.get(0).id, foundBooks.get(0).id)
+        assertEquals(expectedBooks.get(1).id, foundBooks.get(1).id)
+    }
+
+    @Test
+    fun `when search text is randomly capitalized then should return matched books`() {
+        val allBooks = listOf(
+            Book(UUID.randomUUID(), "Good Book 1", "Perfect Author", 1999),
+            Book(UUID.randomUUID(), "Good Book 2", "Perfect Author", 2001),
+            Book(UUID.randomUUID(), "Bad Book 1", "Bad Author", 1999),
+        ).map { x -> x.toEntity() }
+
+        val searchText = "goOD"
+        val expectedBooks = listOf(
+            allBooks[0].toDomain(),
+            allBooks[1].toDomain())
+
+        Mockito.`when`(jpaRepo.findAll()).thenReturn(allBooks);
+
+        val foundBooks = bookRepository.searchBook(searchText);
+
+        assertEquals(expectedBooks.size, foundBooks.size)
+        assertEquals(expectedBooks.get(0).id, foundBooks.get(0).id)
+        assertEquals(expectedBooks.get(1).id, foundBooks.get(1).id)
+    }
+
+    @Test
+    fun `when book title or book author contains search text then should return all matched books`() {
+        val allBooks = listOf(
+            Book(UUID.randomUUID(), "Harry Potter and The Sorcerer's Stone", "J. K. Rowling", 1997),
+            Book(UUID.randomUUID(), "Harry Potter and Prisoner of Azkaban", "J. K. Rowling", 1999),
+            Book(UUID.randomUUID(), "The Invisible Wall: A Love Story That Broke Barriers", "Harry Bernstein", 2006),
+            Book(UUID.randomUUID(), "Unfortunate Book", "Good Author", 1999),
+        ).map { x -> x.toEntity() }
+
+        val searchText = "Harry"
+        val expectedBooks = listOf(
+            allBooks[0].toDomain(),
+            allBooks[1].toDomain(),
+            allBooks[2].toDomain())
+
+        Mockito.`when`(jpaRepo.findAll()).thenReturn(allBooks);
+
+        val foundBooks = bookRepository.searchBook(searchText);
+
+        assertEquals(expectedBooks.size, foundBooks.size)
+        assertEquals(expectedBooks[0].id, foundBooks[0].id)
+        assertEquals(expectedBooks[1].id, foundBooks[1].id)
+        assertEquals(expectedBooks[2].id, foundBooks[2].id)
+    }
+
+    @Test
+    fun `when book name or author does not contains search text then should return empty list`() {
+        val allBooks = listOf(
+            Book(UUID.randomUUID(), "Good Book 1", "Perfect Author", 1999),
+            Book(UUID.randomUUID(), "Good Book 2", "Perfect Author", 2001),
+            Book(UUID.randomUUID(), "Bad Book 1", "Bad Author", 1999),
+        ).map { x -> x.toEntity() }
+
+        val searchText = "randomSearchText"
+        Mockito.`when`(jpaRepo.findAll()).thenReturn(allBooks);
+        val foundBooks = bookRepository.searchBook(searchText);
+
+        assertEquals(0, foundBooks.size)
+    }
+
 }

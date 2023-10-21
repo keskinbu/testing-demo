@@ -24,4 +24,11 @@ class BookRepositoryImpl(private val jpaRepo: JpaBookRepository) : BookRepositor
         }
         return false
     }
+
+    override fun searchBook(searchText: String): List<Book> {
+        val allBooks = jpaRepo.findAll();
+        return allBooks
+            .filter { x -> x.title.contains(searchText, true) || x.author.contains(searchText, true) }
+            .map { x -> x.toDomain() }
+    }
 }
